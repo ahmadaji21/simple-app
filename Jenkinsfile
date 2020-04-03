@@ -1,14 +1,21 @@
 pipeline {
-agent any
+   agent any
+
+   environment {
+       // use your actual issuer URL here and NOT the placeholder {yourOktaDomain}
+       OKTA_OAUTH2_ISSUER           = 'https://dev-748453.okta.com/oauth2/default'
+       OKTA_OAUTH2_CLIENT_ID        = credentials('OKTA_OAUTH2_CLIENT_ID')
+       OKTA_OAUTH2_CLIENT_SECRET    = credentials('OKTA_OAUTH2_CLIENT_SECRET')
+   }
 
    stages {
       stage('Build') {
          steps {
             // Get some code from a GitHub repository
-            git 'https://github.com/ahmadaji21/simple-app.git'
+            git 'https://github.com/<your-username>/simple-app.git'
 
             // Run Maven on a Unix agent.
-            sh "mvn -Dmaven.test.failure.ignore=true clean package"
+            sh "./mvnw -Dmaven.test.failure.ignore=true clean package"
 
             // To run Maven on a Windows agent, use
             // bat "mvn -Dmaven.test.failure.ignore=true clean package"
